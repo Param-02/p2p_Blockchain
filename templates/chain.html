@@ -1,0 +1,48 @@
+<!-- templates/chain.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Blockchain</h2>
+{% for block in chain %}
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5>Block Index: {{ block.index }} <span class="badge bg-light text-dark">Hash: {{ block.hash }}</span></h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Timestamp:</strong> {{ block.timestamp }}</p>
+            <p><strong>Nonce:</strong> {{ block.nonce }}</p>
+            <p><strong>Previous Hash:</strong> {{ block.previous_hash }}</p>
+            <h5 class="mt-3">Transactions:</h5>
+            {% if block.transactions %}
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Sender</th>
+                                <th>Receiver</th>
+                                <th>Amount</th>
+                                <th>Fee</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tx in block.transactions %}
+                                <tr>
+                                    <td>{{ tx.transaction_id }}</td>
+                                    <td>{{ tx.sender }}</td>
+                                    <td>{{ tx.receiver }}</td>
+                                    <td>{{ tx.amount }}</td>
+                                    <td>{{ tx.fee }}</td>
+                                    <td>{{ tx.timestamp }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No transactions in this block.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

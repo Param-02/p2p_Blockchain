@@ -1,0 +1,88 @@
+<!-- templates/pending_live.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4 text-center">Live Pending Transactions</h2>
+        <div class="table-responsive">
+            <table id="transactions-table" class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col"><i class="fas fa-hashtag"></i> Transaction ID</th>
+                        <th scope="col"><i class="fas fa-user"></i> Sender</th>
+                        <th scope="col"><i class="fas fa-user"></i> Receiver</th>
+                        <th scope="col"><i class="fas fa-coins"></i> Amount</th>
+                        <th scope="col"><i class="fas fa-dollar-sign"></i> Fee</th>
+                        <th scope="col"><i class="fas fa-clock"></i> Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-body">
+                    <!-- Live transactions will populate here -->
+                </tbody>
+            </table>
+        </div>
+        <div id="no-transactions" class="text-center text-muted">
+            <p>No pending transactions.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var evtSource = new EventSource("/stream");
+        var transactionsBody = document.getElementById("transactions-body");
+        var noTransactionsDiv = document.getElementById("no-transactions");
+        var table = $('#transactions-table').DataTable({
+            "paging": true,
+            "searching": true,
+            "order": [[4, "desc"]],  // Order by Fee (5th column, zero-based index 4) descending
+            "columns": [
+                { "data": "transaction_id" },
+                { "data": "sender" },
+                { "data": "receiver" },
+                { "data": "amount" },
+                { "data": "fee" },
+                { "data": "timestamp" }
+            ],
+            "columnDefs": [
+                { "type": "num", "targets": 4 }  // Ensure Fee column is treated as numeric
+            ]
+        });
+
+        evtSource.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            var transactions = data.transactions;
+
+            // Clear existing rows
+            table.clear();
+
+            if (transactions.length === 0) {
+                noTransactionsDiv.style.display = "block";
+            } else {
+                noTransactionsDiv.style.display = "none";
+            }
+
+            // Sort transactions by fee descending before adding to DataTable
+            transactions.sort(function(a, b) {
+                return parseFloat(b.fee) - parseFloat(a.fee);
+            });
+
+            transactions.forEach(function(tx) {
+                var date = new Date(parseFloat(tx.timestamp) * 1000).toLocaleString();
+                table.row.add({
+                    "transaction_id": tx.transaction_id || "N/A",
+                    "sender": tx.sender,
+                    "receiver": tx.receiver,
+                    "amount": tx.amount,
+                    "fee": tx.fee,
+                    "timestamp": date
+                });
+            });
+
+            table.draw();
+        };
+    });
+</script>
+{% endblock %}

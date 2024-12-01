@@ -1,0 +1,19 @@
+<!-- templates/balance.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-header bg-primary text-white">
+                <h4>Your Balance</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Username:</strong> {{ username }}</p>
+                <p class="card-text"><strong>Balance:</strong> {{ balance }} <i class="fas fa-coins"></i></p>
+                <a href="{{ url_for('new_transaction') }}" class="btn btn-primary me-2"><i class="fas fa-exchange-alt"></i> Create Transaction</a>
+                <a href="{{ url_for('mine') }}" class="btn btn-success"><i class="fas fa-microchip"></i> Mine Block</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

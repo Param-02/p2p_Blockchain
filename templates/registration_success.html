@@ -1,0 +1,14 @@
+<!-- templates/registration_success.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="alert alert-success text-center" role="alert">
+            <h4 class="alert-heading"><i class="fas fa-check-circle"></i> Registration Successful!</h4>
+            <p>Your account has been created successfully.</p>
+            <hr>
+            <p class="mb-0">Please <a href="{{ url_for('login') }}" class="alert-link">login here</a> to continue.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">Welcome to the Simple Blockchain</h1>
+    {% if username %}
+        <p class="lead">You are logged in as <strong>{{ username }}</strong>.</p>
+        <a href="{{ url_for('new_transaction') }}" class="btn btn-primary me-2"><i class="fas fa-exchange-alt"></i> Create Transaction</a>
+        <a href="{{ url_for('mine') }}" class="btn btn-success"><i class="fas fa-microchip"></i> Mine Block</a>
+    {% else %}
+        <p class="lead">Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to start.</p>
+    {% endif %}
+</div>
+{% endblock %}
