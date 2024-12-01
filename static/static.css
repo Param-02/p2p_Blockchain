@@ -1,0 +1,9 @@
+/* static/styles.css */
+/* Add custom styles here */
+body {
+    padding-top: 60px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
