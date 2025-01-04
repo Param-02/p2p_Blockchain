@@ -29,10 +29,10 @@ logger = logging.getLogger(__name__)
 sse_queue = queue.Queue()
 
 # Get the port number from command-line arguments
-if len(sys.argv) > 1:
-    port = int(sys.argv[1])
-else:
-    port = 5000
+import os
+
+port = int(os.environ.get("PORT", 5000))  # Use PORT from the environment if available
+
 app.config['SESSION_COOKIE_NAME'] = f'session_{port}'
 
 # Get the actual IP address of the machine
